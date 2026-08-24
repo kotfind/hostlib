@@ -66,7 +66,7 @@ in {
     _currentHost = mkOption {
       type = types.attrs;
       readOnly = true;
-      default = cfg.hosts.${cfg._currentHostName} or throw "hostlib._currentHostName must be one of the hostlib.hosts keys";
+      default = cfg.hosts.${cfg._currentHostName} or (throw "hostlib._currentHostName must be one of the hostlib.hosts keys");
     };
 
     # Implemented by the `os` and `home` modules.
