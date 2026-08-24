@@ -15,6 +15,12 @@
       readOnly = true;
       default = name;
     };
+
+    options._type = mkOption {
+      type = types.str;
+      readOnly = true;
+      default = "host";
+    };
   });
 in {
   options.hostlib = {
@@ -36,9 +42,16 @@ in {
           default = name;
         };
 
+        options._type = mkOption {
+          type = types.str;
+          readOnly = true;
+          default = "user";
+        };
+
         options.at = mkOption {
           type = types.functionTo types.attrs;
           default = host: {
+            _type = "userOnHost";
             user = config;
             host = host;
           };
