@@ -23,7 +23,27 @@ in {
     };
 
     users = mkOption {
-      type = types.attrsOf customConfig;
+      type = types.attrsOf (types.submodule ({
+        config,
+        name,
+        ...
+      }: {
+        freeformType = types.lazyAttrsOf types.raw;
+
+        options.name = mkOption {
+          type = types.str;
+          readOnly = true;
+          default = name;
+        };
+
+        options.at = mkOption {
+          type = types.functionTo types.attrs;
+          default = host: {
+            user = config;
+            host = host;
+          };
+        };
+      }));
     };
 
     _currentHostName = mkOption {
