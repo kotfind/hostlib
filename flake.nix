@@ -1,5 +1,5 @@
 {
   outputs = {...}: {
-    nixosModules.default = import ./modules/shared.nix;
+    nixosModules.default = import ./modules/os.nix;
   };
 }
