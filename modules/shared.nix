@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  inherit (lib) attrNames elem mkOption types;
+  inherit (lib) attrNames elem mkIf mkOption types;
 
   cfg = config.hostlib;
 
@@ -39,6 +39,12 @@ in {
     # Implemented by the `os` and `home` modules.
     trueFor = mkOption {
       type = types.functionTo types.bool;
+    };
+
+    mkFor = mkOption {
+      type = types.raw;
+      readOnly = true;
+      default = host: mkIf (cfg.trueFor host);
     };
   };
 
