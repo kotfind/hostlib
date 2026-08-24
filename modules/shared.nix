@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  inherit (lib) mkOption types;
+  inherit (lib) attrNames elem mkOption types;
 
   customConfig = types.submodule ({name, ...}: {
     freeformType = types.lazyAttrsOf types.raw;
@@ -23,6 +23,10 @@ in {
     users = mkOption {
       type = types.attrsOf customConfig;
     };
+
+    _currentHostName = mkOption {
+      type = types.str;
+    };
   };
 
   config.assertions = [
@@ -33,6 +37,10 @@ in {
     {
       assertion = config.hostlib.users != {};
       message = "hostlib.users must be defined";
+    }
+    {
+      assertion = elem config.hostlib._currentHostName (attrNames config.hostlib.hosts);
+      message = "hostlib._currentHostName must be one of the hostlib.hosts keys";
     }
   ];
 }
