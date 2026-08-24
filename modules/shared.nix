@@ -5,9 +5,15 @@
 }: let
   inherit (lib) mkOption types;
 
-  customConfig = types.submodule {
+  customConfig = types.submodule ({name, ...}: {
     freeformType = types.lazyAttrsOf types.raw;
-  };
+
+    options.name = mkOption {
+      type = types.str;
+      readOnly = true;
+      default = name;
+    };
+  });
 in {
   options.hostlib = {
     hosts = mkOption {
