@@ -13,37 +13,20 @@
     home-manager,
     hostlib,
     ...
-  }: let
-    inherit (nixpkgs.lib) nixosSystem;
-    homeManager = home-manager.nixosModules.home-manager;
-  in {
-    nixosConfigurations.vm = nixosSystem {
-      system = "x86_64-linux";
-      modules = [
+  }: {
+    nixosConfigurations = hostlib.lib.eachHostSystem {
+      nixosSystem = nixpkgs.lib.nixosSystem;
+
+      homeManagerModule = home-manager.nixosModules.home-manager;
+
+      profiles = import ./profiles.nix;
+
+      systemModules = [
         ./os.nix
+      ];
 
-        hostlib.nixosModules.default
-
-        ./profiles.nix
-
-        homeManager
-        (
-          {...}: {
-            hostlib.curHostName = "vm1";
-
-            home-manager.users.test = {
-              imports = [./home.nix ./profiles.nix hostlib.homeManagerModules.default];
-
-              hostlib.curHostName = "vm1";
-              hostlib.curUserName = "test";
-            };
-
-            users.users.test = {
-              initialPassword = "test";
-              isNormalUser = true;
-            };
-          }
-        )
+      homeModules = [
+        ./home.nix
       ];
     };
   };

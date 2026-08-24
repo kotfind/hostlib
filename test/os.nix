@@ -9,4 +9,9 @@
   networking.hostName = "vm";
 
   system.stateVersion = "26.11";
+
+  users.users.test = {
+    initialPassword = "test";
+    isNormalUser = true;
+  };
 }
