@@ -24,18 +24,18 @@
 
         hostlib.nixosModules.default
 
-        ./profile.nix
+        ./profiles.nix
 
         homeManager
         (
           {...}: {
-            hostlib._currentHostName = "vm1";
+            hostlib.curHostName = "vm1";
 
             home-manager.users.test = {
-              imports = [./home.nix ./profile.nix hostlib.homeManagerModules.default];
+              imports = [./home.nix ./profiles.nix hostlib.homeManagerModules.default];
 
-              hostlib._currentHostName = "vm1";
-              hostlib._currentUserName = "test";
+              hostlib.curHostName = "vm1";
+              hostlib.curUserName = "test";
             };
 
             users.users.test = {

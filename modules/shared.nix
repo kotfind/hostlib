@@ -59,14 +59,14 @@ in {
       }));
     };
 
-    _currentHostName = mkOption {
+    curHostName = mkOption {
       type = types.str;
     };
 
-    _currentHost = mkOption {
+    _curHost = mkOption {
       type = types.attrs;
       readOnly = true;
-      default = cfg.hosts.${cfg._currentHostName} or (throw "hostlib._currentHostName must be one of the hostlib.hosts keys");
+      default = cfg.hosts.${cfg.curHostName} or (throw "hostlib.curHostName must be one of the hostlib.hosts keys");
     };
 
     # Implemented by the `os` and `home` modules.
@@ -91,8 +91,8 @@ in {
       message = "hostlib.users must be defined";
     }
     {
-      assertion = elem cfg._currentHostName (attrNames cfg.hosts);
-      message = "hostlib._currentHostName must be one of the hostlib.hosts keys";
+      assertion = elem cfg.curHostName (attrNames cfg.hosts);
+      message = "hostlib.curHostName must be one of the hostlib.hosts keys";
     }
   ];
 }
