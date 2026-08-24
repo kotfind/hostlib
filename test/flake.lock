@@ -20,6 +20,17 @@
         "type": "github"
       }
     },
+    "hostlib": {
+      "locked": {
+        "path": "..",
+        "type": "path"
+      },
+      "original": {
+        "path": "..",
+        "type": "path"
+      },
+      "parent": []
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1787498568,
@@ -39,6 +50,7 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "hostlib": "hostlib",
         "nixpkgs": "nixpkgs"
       }
     }
