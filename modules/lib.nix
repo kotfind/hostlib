@@ -1,6 +1,8 @@
 let
   inherit (builtins) mapAttrs;
 
+  util = import ./util.nix;
+
   nixosModule = import ./os.nix;
   homeModule = import ./home.nix;
 in {
@@ -10,7 +12,10 @@ in {
     systemModules,
     homeModules,
     homeManagerModule,
-  }:
+  }: let
+    inherit (profiles.hostlib) hosts;
+    inherit (util) genAttrs;
+  in
     mapAttrs (hostName: _:
       nixosSystem {
         system = "x86_64-linux";
@@ -22,17 +27,15 @@ in {
             profiles
             {hostlib.curHostName = hostName;}
             {
-              home-manager.users =
-                mapAttrs (userName: _: {
-                  imports = [profiles homeModule] ++ homeModules;
-                  hostlib = {
-                    curHostName = hostName;
-                    curUserName = userName;
-                  };
-                })
-                profiles.hostlib.users;
+              home-manager.users = genAttrs (hosts.${hostName}.userNames) (userName: {
+                imports = [profiles homeModule] ++ homeModules;
+                hostlib = {
+                  curHostName = hostName;
+                  curUserName = userName;
+                };
+              });
             }
           ];
       })
-    profiles.hostlib.hosts;
+    hosts;
 }
