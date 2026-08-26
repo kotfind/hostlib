@@ -12,17 +12,24 @@ in {
   ];
 
   options.hostlib = {
+    # Name of the user the current home-manager configuration is for.
     curUserName = mkOption {
       type = types.str;
+      description = "Name of the current user. Must be a key of `hostlib.users`.";
+      example = "admin";
     };
 
+    # The user entry selected by `curUserName`.
     _curUser = mkOption {
       type = types.attrs;
       readOnly = true;
       default = cfg.users.${cfg.curUserName} or (throw "hostlib.curUserName must be one of the hostlib.users keys");
+      description = "The user entry selected by `curUserName`.";
+      example = {name = "admin";};
     };
   };
 
+  # Whether the given value matches the current user and host.
   config.hostlib.trueFor = x:
     if x._type == "host"
         then x.name == cfg._curHost.name

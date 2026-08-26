@@ -6,6 +6,9 @@ let
   nixosModule = import ./os.nix;
   homeModule = import ./home.nix;
 
+  # NixOS modules for one host: the caller's system modules, the
+  # hostlib modules, the profile, and home-manager wiring for all of
+  # the host's users.
   mkHostModules = {
     profiles,
     systemModules,
@@ -32,6 +35,7 @@ let
 in {
   inherit mkHostModules;
 
+  # One nixosConfiguration per host in the profile.
   eachHostSystem = {nixosSystem, ...} @ args:
     mapAttrs (hostName: _:
       nixosSystem {
