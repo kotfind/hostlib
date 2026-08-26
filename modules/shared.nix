@@ -56,11 +56,7 @@ in {
     };
 
     users = mkOption {
-      type = types.attrsOf (types.submodule ({
-        config,
-        name,
-        ...
-      }: {
+      type = types.attrsOf (types.submodule ({name, ...}: {
         freeformType = types.lazyAttrsOf types.raw;
 
         options.name = mkOption {
@@ -77,17 +73,6 @@ in {
           default = "user";
           description = "Marks this value as a user.";
           example = "user";
-        };
-
-        options.at = mkOption {
-          type = types.functionTo types.attrs;
-          default = host: {
-            _type = "userOnHost";
-            user = config;
-            host = host;
-          };
-          description = "Combine this user with a host into a `userOnHost` value.";
-          example = "users.test.at hosts.vm1";
         };
       }));
       description = "All known users, keyed by user name.";
@@ -108,6 +93,31 @@ in {
       example = {name = "vm1";};
     };
 
+    join = mkOption {
+      type = types.functionTo (types.functionTo types.attrs);
+      readOnly = true;
+      default = a: b: let
+        user =
+          if a._type == "user"
+          then a
+          else b;
+        host =
+          if a._type == "host"
+          then a
+          else b;
+      in
+        if (a._type == "host" && b._type == "user") || (a._type == "user" && b._type == "host")
+        then
+          if elem user.name host.userNames
+          then {
+            _type = "userOnHost";
+            inherit user host;
+          }
+          else throw "hostlib.join: '${user.name}' must be one of the hostlib.hosts.${host.name}.userNames"
+        else throw "hostlib.join: expected one user and one host, got '${a._type}' and '${b._type}'";
+      description = "Combine a user and a host (in either order) into a `userOnHost` value. Fails if the user is not listed in the host's `userNames`.";
+    };
+
     # Implemented by the `os` and `home` modules.
     trueFor = mkOption {
       type = types.functionTo types.bool;
@@ -120,7 +130,6 @@ in {
       readOnly = true;
       default = host: mkIf (cfg.trueFor host);
       description = "Conditionally apply config for a host, user or `userOnHost` value: `mkFor value { ... }` expands to `mkIf (trueFor value) { ... }`.";
-      example = "environment.etc.\"hostlib-mkfor-host\" = mkFor hosts.vm1 {text = \"on\";};";
     };
   };
 

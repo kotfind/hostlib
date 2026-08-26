@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (config.hostlib) hosts mkFor trueFor users;
+  inherit (config.hostlib) hosts join mkFor trueFor users;
 in {
   home.stateVersion = "26.11";
 
@@ -15,7 +15,7 @@ in {
   home.file.".hostlib-mkfor-host" = mkFor hosts.vm1 {text = "on";};
 
   # home-manager: mkFor USER_ON_HOST
-  home.file.".hostlib-mkfor-user-on-host" = mkFor (users.test.at hosts.vm1) {text = "on";};
+  home.file.".hostlib-mkfor-user-on-host" = mkFor (join users.test hosts.vm1) {text = "on";};
 
   # home-manager: trueFor USER
   home.file.".hostlib-truefor-user" = lib.mkIf (trueFor users.test) {text = "on";};
