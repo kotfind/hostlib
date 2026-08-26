@@ -13,13 +13,15 @@
     home-manager,
     hostlib,
     ...
-  }: {
+  }: let
+    profiles = import ./profiles.nix;
+  in {
     nixosConfigurations = hostlib.lib.eachHostSystem {
       nixosSystem = nixpkgs.lib.nixosSystem;
 
       homeManagerModule = home-manager.nixosModules.home-manager;
 
-      profiles = import ./profiles.nix;
+      inherit profiles;
 
       systemModules = [
         ./os.nix
@@ -28,6 +30,10 @@
       homeModules = [
         ./home.nix
       ];
+    };
+
+    checks.x86_64-linux = import ./checks.nix {
+      inherit home-manager hostlib nixpkgs profiles;
     };
   };
 }
