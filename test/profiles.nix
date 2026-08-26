@@ -1,8 +1,18 @@
 {
   hostlib = {
     hosts = {
-      vm1 = {};
-      vm2 = {};
+      vm1 = {
+        userNames = [
+          "root"
+          "test"
+        ];
+      };
+
+      vm2 = {
+        userNames = [
+          "root"
+        ];
+      };
     };
 
     users = {
