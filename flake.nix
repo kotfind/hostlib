@@ -2,10 +2,10 @@
   # Hostlib: shared NixOS and home-manager modules for managing
   # hosts, users and per-host configurations.
   outputs = {...}: {
-    nixosModules.default = import ./modules/os.nix;
+    nixosModules.default = import ./src/system.nix;
 
-    homeManagerModules.default = import ./modules/home.nix;
+    homeManagerModules.default = import ./src/home.nix;
 
-    lib = import ./modules/lib.nix;
+    lib = import ./src/lib.nix;
   };
 }

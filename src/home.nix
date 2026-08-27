@@ -32,11 +32,11 @@ in {
   # Whether the given value matches the current user and host.
   config.hostlib.trueFor = x:
     if x._type == "host"
-        then x.name == cfg._curHost.name
+    then x.name == cfg._curHost.name
     else if x._type == "user"
-        then x.name == cfg._curUser.name
+    then x.name == cfg._curUser.name
     else if x._type == "userOnHost"
-        then x.user.name == cfg._curUser.name && x.host.name == cfg._curHost.name
+    then x.user.name == cfg._curUser.name && x.host.name == cfg._curHost.name
     else throw "hostlib.trueFor: unsupported value type '${x._type}'";
 
   config.assertions = [

@@ -24,7 +24,7 @@
       inherit profiles;
 
       systemModules = [
-        ./os.nix
+        ./system.nix
       ];
 
       homeModules = [

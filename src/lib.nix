@@ -3,13 +3,13 @@ let
 
   util = import ./util.nix;
 
-  nixosModule = import ./os.nix;
+  nixosModule = import ./system.nix;
   homeModule = import ./home.nix;
 
   # NixOS modules for one host: the caller's system modules, the
   # hostlib modules, the profile, and home-manager wiring for all of
   # the host's users.
-  mkHostModules = {
+  _mkHostModules = {
     profiles,
     systemModules,
     homeModules,
@@ -33,14 +33,14 @@ let
       }
     ];
 in {
-  inherit mkHostModules;
+  inherit _mkHostModules;
 
   # One nixosConfiguration per host in the profile.
   eachHostSystem = {nixosSystem, ...} @ args:
     mapAttrs (hostName: _:
       nixosSystem {
         system = "x86_64-linux";
-        modules = mkHostModules {
+        modules = _mkHostModules {
           inherit (args) homeManagerModule homeModules profiles systemModules;
           inherit hostName;
         };

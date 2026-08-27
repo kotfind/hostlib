@@ -118,7 +118,7 @@ in {
       description = "Combine a user and a host (in either order) into a `userOnHost` value. Fails if the user is not listed in the host's `userNames`.";
     };
 
-    # Implemented by the `os` and `home` modules.
+    # Implemented by the `system` and `home` modules.
     trueFor = mkOption {
       type = types.functionTo types.bool;
       description = "Whether a host, user or `userOnHost` value matches the current host (and current user in home-manager).";

@@ -7,11 +7,11 @@
   inherit (nixpkgs.legacyPackages.x86_64-linux.testers) runNixOSTest;
 
   mkHost = hostName: {
-    imports = hostlib.lib.mkHostModules {
+    imports = hostlib.lib._mkHostModules {
       inherit profiles;
 
       systemModules = [
-        ./os.nix
+        ./system.nix
       ];
 
       homeModules = [
